@@ -1,0 +1,149 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+class Asset {
+    private String assetId;
+    private String location;
+
+    public Asset(String assetId, String location) {
+        this.assetId = assetId;
+        this.location = location;
+    }
+
+    public String getAssetId() {
+        return assetId;
+    }
+
+    public void setAssetId(String assetId) {
+        this.assetId = assetId;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    @Override
+    public String toString() {
+        return "Asset{" +
+                "assetId='" + assetId + '\'' +
+                ", location='" + location + '\'' +
+                '}';
+    }
+}
+
+public class AssetManager {
+    private Map<String, Asset> assetMap;
+
+    public AssetManager() {
+        this.assetMap = new HashMap<>();
+    }
+
+    public void addAsset(String assetId, String location) {
+        Asset asset = new Asset(assetId, location);
+        assetMap.put(assetId, asset);
+    }
+
+    public void updateAssetLocation(String assetId, String newLocation) {
+        Asset asset = assetMap.get(assetId);
+        if (asset != null) {
+            asset.setLocation(newLocation);
+        } else {
+            System.out.println("Asset not found.");
+        }
+    }
+
+    public Asset getAsset(String assetId) {
+        return assetMap.get(assetId);
+    }
+
+    public void printAllAssets() {
+        for (Asset asset : assetMap.values()) {
+            System.out.println(asset);
+        }
+    }
+
+    public static void main(String[] args) {
+        AssetManager manager = new AssetManager();
+        Scanner scanner = new Scanner(System.in);
+
+        String[] predefinedAssetIds = {"asset1", "asset2", "asset3", "asset4"};
+        String[] predefinedLocations = {"Warehouse A", "Warehouse B", "Warehouse C", "Warehouse D"};
+
+        while (true) {
+            System.out.println("\nAsset Management System");
+            System.out.println("1. Add Asset");
+            System.out.println("2. Update Asset Location");
+            System.out.println("3. View All Assets");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();  // Consume newline
+
+            switch (choice) {
+                case 1:
+                    System.out.println("Choose an Asset ID:");
+                    for (int i = 0; i < predefinedAssetIds.length; i++) {
+                        System.out.println((i + 1) + ". " + predefinedAssetIds[i]);
+                    }
+                    int assetChoice = scanner.nextInt() - 1;
+                    scanner.nextLine();  // Consume newline
+
+                    System.out.println("Choose a Location:");
+                    for (int i = 0; i < predefinedLocations.length; i++) {
+                        System.out.println((i + 1) + ". " + predefinedLocations[i]);
+                    }
+                    int locationChoice = scanner.nextInt() - 1;
+                    scanner.nextLine();  // Consume newline
+
+                    if (assetChoice >= 0 && assetChoice < predefinedAssetIds.length &&
+                        locationChoice >= 0 && locationChoice < predefinedLocations.length) {
+                        manager.addAsset(predefinedAssetIds[assetChoice], predefinedLocations[locationChoice]);
+                        System.out.println("Asset added successfully.");
+                    } else {
+                        System.out.println("Invalid choice.");
+                    }
+                    break;
+                case 2:
+                    System.out.println("Choose an Asset ID to update:");
+                    for (int i = 0; i < predefinedAssetIds.length; i++) {
+                        System.out.println((i + 1) + ". " + predefinedAssetIds[i]);
+                    }
+                    assetChoice = scanner.nextInt() - 1;
+                    scanner.nextLine();  // Consume newline
+
+                    System.out.println("Choose a New Location:");
+                    for (int i = 0; i < predefinedLocations.length; i++) {
+                        System.out.println((i + 1) + ". " + predefinedLocations[i]);
+                    }
+                    locationChoice = scanner.nextInt() - 1;
+                    scanner.nextLine();  // Consume newline
+
+                    if (assetChoice >= 0 && assetChoice < predefinedAssetIds.length &&
+                        locationChoice >= 0 && locationChoice < predefinedLocations.length) {
+                        manager.updateAssetLocation(predefinedAssetIds[assetChoice], predefinedLocations[locationChoice]);
+                        System.out.println("Asset location updated successfully.");
+                    } else {
+                        System.out.println("Invalid choice.");
+                    }
+                    break;
+                case 3:
+                    System.out.println("All assets:");
+                    manager.printAllAssets();
+                    break;
+                case 4:
+                    System.out.println("Exiting...");
+                    scanner.close();
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+                    break;
+            }
+        }
+    }
+}
